@@ -37,19 +37,14 @@ train_dataset <- na.omit(train_dataset)
 set.seed(400)
 
 # Logistic Regression
-trControl <- trainControl(method = 'repeatedcv', number = 5,search = 'random')
+
 train_dataset$StayNum <- as.factor(as.numeric(train_dataset$Stay))
 logistic_model <- glm(train_dataset$StayNum ~ ., 
                       data = dummy_train, 
                       family = "binomial")
 summary(logistic_model)
-confusionMatrix(
-  factor(logistic_model), 
-  factor(train_dataset$StayNum),
-  positive = NULL,
-  prevalence = NULL,
-  mode = "sens_spec"
-)
+pdata <- predict(logistic_model, newdata = dummy_train, type = "response")
+mean(pdata)
 #plot(logistic_model, col="steelblue")
 
 
@@ -78,8 +73,11 @@ set.seed(2)
 knn <- train(Stay ~ ., 
                 data = train_dataset,
                 method = "knn",
-                trControl=ctrl_knn
-                metric = "Accuracy")
+                trControl=ctrl_knn,
+                metric = "Accuracy",
+               tuneLength = 2,
+               na.action = na.pass
+             )
 knn
 confusionMatrix(
   knn,
