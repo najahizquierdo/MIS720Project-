@@ -57,7 +57,7 @@ table(data_raw$Severity.of.Illness)
 table(data_raw$Age)
 
 
-#Drop row case_id since its just there for numbering the rows and holds no value for predicting the stay
+#Drop row case_id, patientid since its just there for numbering the rows and holds no value for predicting the stay
 data_red1 <- subset(data_raw, select = -c(case_id))
 data_red2 <- subset(data_red1, select = -c(patientid))
 data_red2 <- subset(data_red1, select = -c(Hospital_region_code))
@@ -75,7 +75,7 @@ head(data_red2)
 head(data_red3)
 
 
-#The hospital wants to be able to predict if a patient stays longer than 30 months
+#The hospital wants to be able to predict if a patient stays longer than 30 days
 #The target variable 'Stay' has therefore to be transformed into binary, where 0 = less or equal than 30 days and 1= more than 30 days
 data_red3$Stay <- gsub('0-10', 0, data_red3$Stay)
 data_red3$Stay <- gsub('11-20', 0, data_red3$Stay)
